@@ -1,0 +1,65 @@
+create database store;
+use store;
+create table countries(
+  code int primary key ,
+name varchar(20) unique ,
+contient_name varchar(20) not null
+
+);
+create table users (
+    id int primary key ,
+    full_name varchar(20),
+    email varchar(20)unique,
+    gender char(1) check(gender='m'or gender='f'),
+    date_of_brith varchar(15),
+    created_at datetime default CURRENT_TIMESTAMP,
+    country_code int ,
+    foreign key (country_code) references countries(code)
+
+);
+create table orders (
+    id int primary key ,
+    user_id int ,
+    status varchar(6) check ( status='start' or status='finish'),
+    created_at datetime default CURRENT_TIMESTAMP,
+    foreign key (user_id)references users (id)
+);
+
+create table products (
+    id int primary key ,
+    name varchar(10) not null ,
+    price int default 0,
+    status varchar(10) check (status='valid'or status='expird'),
+    created_at datetime default CURRENT_TIMESTAMP 
+);
+create table order_products(
+    order_id int ,
+    product_id int ,
+        primary key (order_id , product_id),
+    quantity int default 0,
+    foreign key (order_id) references orders(id),
+    foreign key (product_id) references products(id)
+
+);
+
+#DML-INSERT
+insert into countries values (069,'Faten','saudi arabia');
+insert into countries values (444,'sultan','jordan');
+insert into users values (06,'Faten Alruwaili', 'fa@gmail.com','f','25 DEC 1996',CURRENT_TIMESTAMP,069)
+insert into orders values (33, 06, 'start',CURRENT_TIMESTAMP );
+insert into orders values (04,06,'start',CURRENT_TIMESTAMP);
+insert into products values  (01,'soda','3','valid',CURRENT_TIMESTAMP);
+insert into products values  (22,'chips','10','valid',CURRENT_TIMESTAMP);
+insert into order_products values (04,01,50);
+#DML-UPDATE
+update countries set code=555, name='abood', contient_name='turkey' where code=444;
+
+#DML-DELETE
+delete from products where id='22';
+
+#DQL-select
+select *from products;
+select * from countries;
+select * from users ;
+select * from order_products;
+select * from orders;
